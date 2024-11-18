@@ -2,7 +2,7 @@ import React from 'react';
 
 const Button = ({ children, size }) => {
 	let buttonWidth =
-		size === 's' ? 'w-1/5' : size === 'm' ? 'w-1/2' : 'w-11/12';
+		size === 's' ? 'w-1/5' : size === 'm' ? 'w-1/2' : 'w-full';
 
 	return (
 		<button
