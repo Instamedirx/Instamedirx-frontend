@@ -10,8 +10,8 @@ import { Button } from '../../../components';
 
 const Login = () => {
 	return (
-		<section className='flex justify-center py-4 gap-10'>
-			<div className='flex w-2/4 flex-col px-6'>
+		<section className='flex justify-center items-center gap-10'>
+			<div className='flex w-full h-full md:w-2/4 flex-col px-3 py-4 md:py-0'>
 				<div className='flex flex-col items-center gap-3'>
 					<img
 						src={Logo}
@@ -21,8 +21,8 @@ const Login = () => {
 					/>
 					<h2 className='font-inria text-4xl'>Login</h2>
 				</div>
-				<form className='my-6 px-12'>
-					<div className='mx-auto flex flex-col items-center gap-4'>
+				<div className='mx-auto w-full max-w-[450px]'>
+					<form className='mt-6 space-y-4 mb-2 px-3'>
 						<div className='flex flex-col gap-2 w-full'>
 							<label
 								htmlFor='email'
@@ -59,43 +59,51 @@ const Login = () => {
 						</div>
 						<a
 							href=''
-							className='w-full text-end text-blue text-sm mr-3'
+							className='w-full pr-2 block text-end text-blue text-sm'
 						>
 							Forgotten password?
 						</a>
 						<Button>Login</Button>
+					</form>
+					<div className='flex justify-center items-center px-7 gap-2'>
+						<div className='flex-grow border border-gray-300' />
+						<p className='text-gray-400 text-[14px] text-center'>
+							or login with
+						</p>
+						<div className='flex-grow border border-gray-300' />
 					</div>
-				</form>
-				<div className='relative'>
-					<div className='absolute -top-2 left-20 w-1/4 border border-gray-300' />
-					<p className='absolute text-gray-400 -top-5 left-60 text-[16px] text-center'>
-						or login with
+					<div className='flex justify-center items-center space-x-16 my-4'>
+						<FcGoogle size={35} />
+						<FaFacebook
+							size={35}
+							className='text-blue'
+						/>
+						<FaApple
+							size={32}
+							className='invert dark:bg-white rounded-md'
+						/>
+					</div>
+					<p className='font-inter text-xs text-center px-8'>
+						By continuing, you agree to InstamediRX's{' '}
+						<a
+							href=''
+							className='text-blue font-semibold'
+						>
+							Privacy policy and Terms of service
+						</a>
 					</p>
-					<div className='absolute -top-2 right-20 w-1/4 border border-gray-300' />
+					<p className='text-center text-xs mt-10 font-inter'>
+						Don't have an account?{' '}
+						<a
+							href=''
+							className='font-bold text-blue'
+						>
+							Sign up
+						</a>
+					</p>
 				</div>
-				<div className='socials flex justify-center items-center gap-14 my-4'>
-					<FcGoogle size={35} />
-					<FaFacebook
-						size={35}
-						className='text-blue'
-					/>
-					<FaApple
-						size={32}
-						className='bg-white fill-black rounded-md dark:bg-black dark:fill-white'
-					/>
-				</div>
-				<p className='font-inter text-xs self-center w-96'>
-					By continuing, you agree to InstamediRX's{' '}
-					<a
-						href=''
-						className='text-blue font-semibold'
-					>
-						Privacy policy and Terms of service
-					</a>
-				</p>
-				<p className='text-center mt-12 font-inter'>Don't have an account? <a href='' className='font-bold text-blue'>Sign up</a></p>
 			</div>
-			<div className='login-img flex w-2/4'>
+			<div className='login-img hidden md:flex w-2/4'>
 				<img
 					src={SideImage}
 					alt='Side image'

@@ -11,7 +11,8 @@ export default {
 				inria: ['Inria Serif', 'sans-serif']
 			},
 			screens: {
-				'xs': '375px'
+				'xxs': '375px',
+				'xs': '520px'
 			}
 		},
 	},
