@@ -1,12 +1,12 @@
-import React from 'react';
-
+import { Link } from 'react-router-dom';
 import Logo from '../../../assets/logo.svg';
 import SideImage from '../../../assets/login/side_image.svg';
 import { FaFacebook } from 'react-icons/fa';
 import { FaApple } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 
-import { Button } from '../../../components';
+import {  Button } from '../../../components';
+
 
 const Login = () => {
 	return (
@@ -94,12 +94,12 @@ const Login = () => {
 					</p>
 					<p className='text-center text-xs mt-10 font-inter'>
 						Don't have an account?{' '}
-						<a
-							href=''
-							className='font-bold text-blue'
+
+						 <Link to='/selection'
+						className='font-bold text-blue'
 						>
-							Sign up
-						</a>
+						Sign up
+						</Link> 
 					</p>
 				</div>
 			</div>
