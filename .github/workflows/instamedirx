@@ -1,0 +1,58 @@
+name: InstaMediRx
+
+# Trigger the workflow on push or pull requests to the main branch
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Specify the jobs that the workflow will run
+jobs:
+  build-and-test:
+    # Strategy defines which Node.js versions to use for the workflow
+    strategy:
+      matrix:
+        node-version: [14.x, 16.x, 18.x]  # Node.js versions to test against
+
+    # The machine to run the job on (Ubuntu in this case)
+    runs-on: ubuntu-latest
+
+    # Define the sequence of steps
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Setup Node.js using the matrix versions
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Cache Node.js modules to speed up the workflow
+      - name: Cache Node.js modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # Install dependencies using npm
+      - name: Install dependencies
+        run: npm install
+
+      # Run tests using npm (assuming there are tests defined in package.json)
+      - name: Run tests
+        run: npm test
+
+      # Optionally, you can add a linting step
+      - name: Run linter
+        run: npm run lint
+
+      # Optionally, build the project (for a build step if applicable)
+      - name: Build project
+        run: npm run build
