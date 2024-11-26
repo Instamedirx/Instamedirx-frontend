@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import Logo from '../../../assets/logo.svg';
 import SideImage from '../../../assets/login/side_image.svg';
 
