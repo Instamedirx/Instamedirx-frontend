@@ -1,7 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import Logo from '../../../assets/logo.svg';
 import SideImage from '../../../assets/login/side_image.svg';
+
 import { FaFacebook } from 'react-icons/fa';
 import { FaApple } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
@@ -19,14 +21,14 @@ const Login = () => {
 						width={100}
 						height={100}
 					/>
-					<h2 className='font-inria text-4xl'>Login</h2>
+					<h2 className='font-inria-serif font-bold text-4xl'>Login</h2>
 				</div>
 				<div className='mx-auto w-full max-w-[450px]'>
 					<form className='mt-6 space-y-4 mb-2 px-3'>
 						<div className='flex flex-col gap-2 w-full'>
 							<label
 								htmlFor='email'
-								className='font-inria font-semibold ml-2'
+								className='font-inria-serif font-bold ml-2'
 							>
 								Email
 								<span className='text-red-500 ml-1'>*</span>
@@ -43,7 +45,7 @@ const Login = () => {
 						<div className='flex flex-col gap-2 w-full'>
 							<label
 								htmlFor='password'
-								className='font-inria font-semibold ml-2'
+								className='font-inria-serif font-bold ml-2'
 							>
 								Password
 								<span className='text-red-500 ml-1'>*</span>
@@ -57,12 +59,12 @@ const Login = () => {
 								className='border-2 border-blue rounded-2xl py-2 px-3 placeholder:text-sm focus:outline-none'
 							/>
 						</div>
-						<a
-							href=''
-							className='w-full pr-2 block text-end text-blue text-sm'
+						<Link
+							to=''
+							className='w-full pr-2 block text-end text-blue text-sm font-medium'
 						>
 							Forgotten password?
-						</a>
+						</Link>
 						<Button>Login</Button>
 					</form>
 					<div className='flex justify-center items-center px-7 gap-2'>
@@ -94,12 +96,12 @@ const Login = () => {
 					</p>
 					<p className='text-center text-xs mt-10 font-inter'>
 						Don't have an account?{' '}
-						<a
-							href=''
+						<Link
+							to='/signup'
 							className='font-bold text-blue'
 						>
 							Sign up
-						</a>
+						</Link>
 					</p>
 				</div>
 			</div>

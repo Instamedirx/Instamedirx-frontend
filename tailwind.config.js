@@ -8,7 +8,8 @@ export default {
 			},
 			fontFamily: {
 				inter: ['Inter', 'sans-serif'],
-				inria: ['Inria Serif', 'sans-serif']
+				'inria-serif': ['Inria Serif', 'serif'],
+				'inria-sans': ['Inria Sans', 'sans-serif'],
 			},
 			screens: {
 				'xxs': '375px',
