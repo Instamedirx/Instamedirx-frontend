@@ -9,6 +9,7 @@ import { Back, Button, Card } from '../../../components';
 import ClientImage from '../../../assets/client_signup_image.svg';
 import { FormInput } from '../components/form';
 import { useForm } from 'react-hook-form';
+import BackgroundColor from '../components/BackgroundColor';
 
 const Signup = () => {
 	const { accountType } = useParams();
@@ -16,14 +17,20 @@ const Signup = () => {
 	const {
 		register,
 		handleSubmit,
+		watch,
 		formState: { errors },
 	} = useForm();
 
 	const onSubmit = data => {
 		console.log(`Form Data ${JSON.stringify(data)}`);
+		const signupData = data;
 		accountType === 'client'
-			? navigate(`/signup/${accountType}/verification`)
-			: navigate(`/signup/${accountType}/registration`);
+			? navigate(`/signup/${accountType}/verification`, {
+					state: { signupData, accountType },
+			  })
+			: navigate(`/signup/${accountType}/registration`, {
+					state: { signupData, accountType },
+			  });
 	};
 
 	const accountTitles = {
@@ -60,6 +67,7 @@ const Signup = () => {
 							labelName='First Name'
 							register={register}
 							errors={errors}
+							required
 						/>
 						<FormInput
 							inputId='last_name'
@@ -67,6 +75,7 @@ const Signup = () => {
 							labelName='Last Name'
 							register={register}
 							errors={errors}
+							required
 						/>
 						<FormInput
 							inputId='email'
@@ -74,6 +83,13 @@ const Signup = () => {
 							labelName='Email Address'
 							register={register}
 							errors={errors}
+							validationRules={{
+								pattern: {
+									value: /^\S+@\S+$/i,
+									message: 'Invalid email format',
+								},
+							}}
+							required
 						/>
 						<FormInput
 							inputId='phone'
@@ -81,6 +97,13 @@ const Signup = () => {
 							labelName='Phone Number'
 							register={register}
 							errors={errors}
+							validationRules={{
+								pattern: {
+									value: /^(\+234|0)(7\d|8\d|9\d)\d{8}$/,
+									message: 'Invalid phone number format',
+								},
+							}}
+							required
 						/>
 						<FormInput
 							inputId='password'
@@ -88,6 +111,14 @@ const Signup = () => {
 							labelName='Password'
 							register={register}
 							errors={errors}
+							validationRules={{
+								minLength: {
+									value: 8,
+									message:
+										'Password must be at least 8 characters',
+								},
+							}}
+							required
 						/>
 						<FormInput
 							inputId='confirm_password'
@@ -95,6 +126,12 @@ const Signup = () => {
 							labelName='Confirm Password'
 							register={register}
 							errors={errors}
+							validationRules={{
+								validate: value =>
+									value === watch('password') ||
+									'Passwords do not match',
+							}}
+							required
 						/>
 						<div className='text-center'>
 							<Button
@@ -120,12 +157,7 @@ const Signup = () => {
 					/>
 				</div>
 			)}
-			{accountType !== 'client' && (
-				<>
-					<div className='absolute bg-blue w-[200px] h-[200px] sm:w-[550px] sm:h-[500px] rounded-full bottom-0 lg:bottom-10 left-0 -z-20 blur-xl' />
-					<div className='absolute bg-black w-[200px] h-[200px] sm:w-[550px] sm:h-[500px] sm:overflow-x-hidden rounded-full right-0 top-0 lg:-top-10 -z-20 blur-xl' />
-				</>
-			)}
+			{accountType !== 'client' && <BackgroundColor />}
 		</section>
 	);
 };

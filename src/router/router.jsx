@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
 import {
 	AccountType,
+	Qualifications,
 	RegistrationDetails,
 	Signup,
 } from '../features/auth/pages';
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
 	{
 		path: '/signup/:accountType/verification',
 		element: <EmailVerification />,
+	},
+	{
+		path: '/signup/:accountType/qualification',
+		element: <Qualifications />,
 	},
 ]);
 
