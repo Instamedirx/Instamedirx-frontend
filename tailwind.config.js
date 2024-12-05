@@ -5,6 +5,7 @@ export default {
 		extend: {
 			colors: {
 				blue: '#007AFF',
+				'light-blue': '#2080e8',
 			},
 			fontFamily: {
 				inter: ['Inter', 'sans-serif'],
@@ -12,9 +13,9 @@ export default {
 				'inria-sans': ['Inria Sans', 'sans-serif'],
 			},
 			screens: {
-				'xxs': '375px',
-				'xs': '520px'
-			}
+				xxs: '375px',
+				xs: '520px',
+			},
 		},
 	},
 	plugins: [],

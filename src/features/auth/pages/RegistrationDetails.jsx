@@ -1,285 +1,310 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import {
+	useLocation,
+	useNavigate,
+	useParams,
+} from 'react-router-dom';
+import { Button, Card } from '../../../components';
+import { FormInput, Select } from '../components/form';
+import { useForm } from 'react-hook-form';
+import { specializations } from '../../../utils/data';
+import BackgroundColor from '../components/BackgroundColor';
 
-const PharmRegistrationDetails = () => {
+const RegistrationDetails = () => {
 	const navigate = useNavigate();
+	const { accountType } = useParams();
+	const { state } = useLocation();
+	const [ethnicity, setEthnicity] = useState('');
+	const [languages, setLanguages] = useState([]);
+	const [
+		selectedSpecialization,
+		setSelectedSpecialization,
+	] = useState(null);
 
-	const [formData, setFormData] = useState({
-		pharmacyName: '',
-		pharmacyAddress: '',
-		city: '',
-		zipCode: '',
-		state: '',
-		country: '',
-		ethnicity: '',
-		spokenLanguage: '',
-		yearsExperience: '',
-		pharmacyLicense: '',
-	});
+	const {
+		register,
+		handleSubmit,
+		setValue,
+		setError,
+		clearErrors,
+		formState: { errors },
+	} = useForm();
 
-	const [errors, setErrors] = useState({});
+	useEffect(() => {
+		// fill up form details with previously populated data if the back button on the qualifications page is clicked
+		if (state?.registrationData) {
+			const data =
+				state.registrationData.registrationDetails;
 
-	const validateForm = () => {
-		const newErrors = {};
+			Object.keys(data).forEach(key => {
+				console.log(key, data[key]);
+				setValue(key, data[key]);
+			});
+			if (data?.specialization) {
+				setSelectedSpecialization(data?.specialization);
+			}
+		}
+	}, [state, setValue]);
 
-		if (!formData.pharmacyName.trim())
-			newErrors.pharmacyName = 'Pharmacy name is required';
-		if (!formData.pharmacyAddress.trim())
-			newErrors.pharmacyAddress =
-				'Pharmacy address is required';
-		if (!formData.city.trim())
-			newErrors.city = 'City is required';
-		if (!formData.zipCode.trim())
-			newErrors.zipCode = 'Zip code is required';
-		if (!formData.state.trim())
-			newErrors.state = 'State/Province is required';
-		if (!formData.country.trim())
-			newErrors.country = 'Country is required';
-		if (!formData.ethnicity)
-			newErrors.ethnicity = 'Ethnicity is required';
-		if (!formData.spokenLanguage)
-			newErrors.spokenLanguage =
-				'Spoken language is required';
-		if (!formData.yearsExperience)
-			newErrors.yearsExperience =
-				'Years of experience are required';
-		if (!formData.pharmacyLicense)
-			newErrors.pharmacyLicense =
-				'Pharmacy license number is required';
+	const onSubmit = data => {
+		if (!selectedSpecialization) {
+			setError('specialization', {
+				type: 'manual',
+				message: 'Specialization is required',
+			});
+			return;
+		}
 
-		return newErrors;
-	};
-
-	const handleChange = e => {
-		setFormData({
-			...formData,
-			[e.target.name]: e.target.value,
+		const registrationData = {
+			...state.signupData,
+			registrationDetails: {
+				...data,
+				specialization: selectedSpecialization,
+			},
+		};
+		console.log(registrationData);
+		navigate(`/signup/${accountType}/qualification`, {
+			state: { registrationData },
 		});
 	};
 
-	const handleSubmit = e => {
-		e.preventDefault();
-		const validationErrors = validateForm();
-
-		if (Object.keys(validationErrors).length === 0) {
-			console.log('Form Submitted', formData);
-
-			navigate('/Pharmacist/qualifications');
-		} else {
-			setErrors(validationErrors);
-		}
-	};
-
 	return (
-		<div className='min-h-screen flex items-center justify-center bg-gray-100 px-4 sm:px-6 lg:px-8 py-10'>
-			<div className='w-full max-w-2xl p-6 bg-white shadow-lg rounded-lg'>
-				<div className='text-center mb-6'>
+		<section className='min-h-screen flex items-center sm:justify-center px-6 lg:px-8 py-10 border border-red-500 relative'>
+			<Card styles='max-w-3xl w-3/4 pt-14 pb-8 px-7 w-full'>
+				<div className='mb-10 space-y-2'>
 					<h1 className='text-2xl font-semibold text-gray-800'>
 						Registration details
 					</h1>
-					<p className='text-gray-500'>
-						Fill in the requested information
+					<p className='text-gray-500 text-sm'>
+						Fill in the registration details requested
 					</p>
 				</div>
 
-				<form onSubmit={handleSubmit}>
-					<div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
-						{[
-							{
-								label: 'Pharmacy name',
-								name: 'pharmacyName',
-								type: 'text',
-							},
-							{
-								label: 'Pharmacy address',
-								name: 'pharmacyAddress',
-								type: 'text',
-							},
-							{ label: 'City', name: 'city', type: 'text' },
-							{
-								label: 'Zip code',
-								name: 'zipCode',
-								type: 'text',
-							},
-							{
-								label: 'State/Province',
-								name: 'state',
-								type: 'text',
-							},
-							{
-								label: 'Country',
-								name: 'country',
-								type: 'text',
-							},
-						].map(field => (
-							<div
-								key={field.name}
-								className='mb-4'
-							>
-								<label
-									htmlFor={field.name}
-									className='block text-sm font-medium text-gray-700'
-								>
-									{field.label}{' '}
-									<span className='text-red-500'>*</span>
-								</label>
-								<input
-									type={field.type}
-									id={field.name}
-									name={field.name}
-									value={formData[field.name]}
-									onChange={handleChange}
-									className={`mt-1 block w-full px-4 py-2 text-gray-700 bg-gray-50 border ${
-										errors[field.name]
-											? 'border-red-500'
-											: 'border-blue'
-									} rounded-lg focus:ring-blue focus:border-blue`}
-								/>
-								{errors[field.name] && (
-									<p className='text-sm text-red-500 mt-1'>
-										{errors[field.name]}
-									</p>
-								)}
-							</div>
-						))}
+				<form onSubmit={handleSubmit(onSubmit)}>
+					<div className='flex flex-col sm:grid sm:grid-cols-2 gap-6 justify-between'>
+						<FormInput
+							inputId={
+								accountType === 'pharmacist'
+									? 'pharmacy_name'
+									: 'hospital_name'
+							}
+							inputType='text'
+							labelName={
+								accountType === 'pharmacist'
+									? 'Pharmacy Name'
+									: 'Clinic/Hospital Name(optional)'
+							}
+							errors={errors}
+							register={register}
+						/>
+						<FormInput
+							inputId={
+								accountType === 'pharmacist'
+									? 'pharmacy_address'
+									: 'hospital_address'
+							}
+							inputType='text'
+							labelName={
+								accountType === 'pharmacist'
+									? 'Pharmacy Address'
+									: 'Clinic/Hospital Address(optional)'
+							}
+							errors={errors}
+							register={register}
+						/>
+						<FormInput
+							inputId={
+								accountType === 'pharmacist'
+									? 'city'
+									: 'zip_code'
+							}
+							inputType='text'
+							labelName={
+								accountType === 'pharmacist'
+									? 'City'
+									: 'Zip Code'
+							}
+							errors={errors}
+							register={register}
+							required={
+								accountType === 'pharmacist' ? false : true
+							}
+						/>
+						<FormInput
+							inputId={
+								accountType === 'pharmacist'
+									? 'zip_code'
+									: 'city'
+							}
+							inputType='text'
+							labelName={
+								accountType === 'pharmacist'
+									? 'Zip Code'
+									: 'City'
+							}
+							errors={errors}
+							register={register}
+							required={
+								accountType === 'pharmacist' ? false : true
+							}
+						/>
+						<FormInput
+							inputId={
+								accountType === 'pharmacist'
+									? 'state'
+									: 'country'
+							}
+							inputType='text'
+							labelName={
+								accountType === 'pharmacist'
+									? 'State/Province'
+									: 'Country'
+							}
+							errors={errors}
+							register={register}
+							required={
+								accountType === 'pharmacist' ? false : true
+							}
+						/>
+						<FormInput
+							inputId={
+								accountType === 'pharmacist'
+									? 'country'
+									: 'state'
+							}
+							inputType='text'
+							labelName={
+								accountType === 'pharmacist'
+									? 'Country'
+									: 'State/Province'
+							}
+							errors={errors}
+							register={register}
+							required={
+								accountType === 'pharmacist' ? false : true
+							}
+						/>
 
-						{[
-							{
-								label: 'Ethnicity',
-								name: 'ethnicity',
-								options: [
-									'Select',
-									'African',
-									'Asian',
-									'Caucasian',
-									'Other',
-								],
-							},
-							{
-								label: 'Spoken language',
-								name: 'spokenLanguage',
-								options: [
-									'Select',
-									'English',
-									'Spanish',
-									'French',
-									'Other',
-								],
-							},
-						].map(dropdown => (
-							<div
-								key={dropdown.name}
-								className='mb-4'
-							>
-								<label
-									htmlFor={dropdown.name}
-									className='block text-sm font-medium text-gray-700'
-								>
-									{dropdown.label}{' '}
-									<span className='text-red-500'>*</span>
-								</label>
-								<select
-									id={dropdown.name}
-									name={dropdown.name}
-									value={formData[dropdown.name]}
-									onChange={handleChange}
-									className={`mt-1 block w-full px-4 py-2 text-gray-700 bg-gray-50 border ${
-										errors[dropdown.name]
-											? 'border-red-500'
-											: 'border-blue'
-									} rounded-lg focus:ring-blue focus:border-blue`}
-								>
-									{dropdown.options.map(option => (
-										<option
-											key={option}
-											value={option}
-										>
-											{option}
-										</option>
-									))}
-								</select>
-								{errors[dropdown.name] && (
-									<p className='text-sm text-red-500 mt-1'>
-										{errors[dropdown.name]}
-									</p>
-								)}
-							</div>
-						))}
+						{/* TODO: Create the select inputs for ethnicity and spoken languages */}
+						<Select
+							name='ethnicity'
+							label='Ethnicity'
+							register={register}
+							errors={errors}
+							// required={
+							// 	accountType === 'pharmacist' ? false : true
+							// }
+						/>
+						<Select
+							name='spoken_languages'
+							label='Spoken Languages'
+							register={register}
+							// required={
+							// 	accountType === 'pharmacist' ? false : true
+							// }
+							errors={errors}
+						/>
 
-						<div className='mb-4'>
-							<label
-								htmlFor='yearsExperience'
-								className='block text-sm font-medium text-gray-700'
-							>
-								Years of experience{' '}
-								<span className='text-red-500'>*</span>
-							</label>
-							<input
-								type='number'
-								id='yearsExperience'
-								name='yearsExperience'
-								value={formData.yearsExperience}
-								onChange={handleChange}
-								className={`mt-1 block w-full px-4 py-2 text-gray-700 bg-gray-50 border ${
-									errors.yearsExperience
-										? 'border-red-500'
-										: 'border-blue'
-								} rounded-lg focus:ring-blue-500 focus:border-blue-500`}
-							/>
-							{errors.yearsExperience && (
-								<p className='text-sm text-red-500 mt-1'>
-									{errors.yearsExperience}
-								</p>
-							)}
-						</div>
-
-						<div className='mb-4'>
-							<label
-								htmlFor='pharmacyLicense'
-								className='block text-sm font-medium text-gray-700'
-							>
-								Pharmacy license number{' '}
-								<span className='text-red-500'>*</span>
-							</label>
-							<input
-								type='text'
-								id='pharmacyLicense'
-								name='pharmacyLicense'
-								value={formData.pharmacyLicense}
-								onChange={handleChange}
-								className={`mt-1 block w-full px-4 py-2 text-gray-700 bg-gray-50 border ${
-									errors.pharmacyLicense
-										? 'border-red-500'
-										: 'border-blue'
-								} rounded-lg focus:ring-blue-500 focus:border-blue-500`}
-							/>
-							{errors.pharmacyLicense && (
-								<p className='text-sm text-red-500 mt-1'>
-									{errors.pharmacyLicense}
-								</p>
-							)}
-						</div>
+						<FormInput
+							inputId={
+								accountType === 'pharmacist'
+									? 'experience'
+									: 'license'
+							}
+							inputType='text'
+							labelName={
+								accountType === 'pharmacist'
+									? 'Years of Experience'
+									: 'Medical License Number'
+							}
+							errors={errors}
+							register={register}
+						/>
+						<FormInput
+							inputId={
+								accountType === 'pharmacist'
+									? 'license'
+									: 'experience'
+							}
+							inputType='text'
+							labelName={
+								accountType === 'pharmacist'
+									? 'Pharmacy License Number'
+									: 'Years of Experience'
+							}
+							errors={errors}
+							register={register}
+						/>
 					</div>
 
-					<div className='flex justify-between mt-6'>
-						<button
+					{accountType !== 'pharmacist' && (
+						<div className={`my-12 space-y-8`}>
+							<p
+								className={`${
+									errors.specialization &&
+									'text-red-500'
+								}`}
+							>
+								Specialization{' '}
+								<span className='text-red-500'>*</span>
+							</p>
+
+							<div className='grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-8'>
+								{specializations.map(specialization => (
+									<div
+										key={specialization}
+										className={`text-center rounded-full py-0.5 hover:bg-light-blue hover:text-white hover:border-none hover:py-0.5 cursor-pointer ${
+											selectedSpecialization ===
+											specialization
+												? 'border-none bg-blue text-white'
+												: 'border-2 border-blue'
+										}`}
+										{...register('specialization', {
+											required: {
+												value: true,
+												message:
+													'Specialization is required',
+											},
+										})}
+										onClick={e => {
+											setSelectedSpecialization(
+												specialization
+											);
+											// clearErrors('specialization');
+										}}
+									>
+										{specialization}
+									</div>
+								))}
+							</div>
+							{errors.specialization && (
+								<p className='text-red-500'>
+									{errors.specialization.message}
+								</p>
+							)}
+						</div>
+					)}
+
+					<div className='flex justify-between gap-12 xs:gap-0 xs:px-12 mt-6 font-inter'>
+						<Button
 							type='button'
 							onClick={() => navigate('/logout')}
-							className='bg-gray-300 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-400 transition duration-200'
+							styles='max-w-[120px]'
 						>
 							Log out
-						</button>
-						<button
+						</Button>
+						<Button
 							type='submit'
-							className='bg-blue text-white py-2 px-4 rounded-lg hover:bg-blue transition duration-200'
+							styles='max-w-[120px]'
 						>
 							Next
-						</button>
+						</Button>
 					</div>
 				</form>
-			</div>
-		</div>
+			</Card>
+			<BackgroundColor />
+		</section>
 	);
 };
 
-export default PharmRegistrationDetails;
+export default RegistrationDetails;

@@ -37,8 +37,8 @@ const AccountType = () => {
 	return (
 		<div className='min-h-screen flex flex-col justify-center items-center lg:flex-row gap-8 px-0 sm:px-6 lg:px-6'>
 			<div className='w-full md:w-5/6 lg:w-1/2 p-6'>
-				<div className='flex justify-center xs:justify-normal xs:space-x-28 mb-4 md:mb-8'>
-					<Back styles='hidden xs:flex xs:text-xl sm:text-2xl md:text-3xl' />
+				<div className='flex justify-center xs:justify-normal xs:space-x-36 mb-4 md:mb-8'>
+					<Back styles='hidden xs:flex xs:text-xl' />
 					<img
 						src={Logo}
 						alt='Logo'
@@ -46,10 +46,10 @@ const AccountType = () => {
 					/>
 				</div>
 				<div className='space-y-4'>
-					<h1 className='text-3xl md:text-5xl font-semibold text-gray-800 mb-2'>
+					<h1 className='text-2xl md:text-3xl font-semibold text-gray-800 mb-2'>
 						Account Type
 					</h1>
-					<p className='text-gray-500 md:text-xl'>
+					<p className='text-gray-500'>
 						Select preferred account type
 					</p>
 				</div>
@@ -66,7 +66,7 @@ const AccountType = () => {
 							} ${
 								index === accountTypes.length - 1 &&
 								accountTypes.length % 2 !== 0
-									? 'col-span-2 mx-auto lg:mx-0 border border-red-500'
+									? 'col-span-2 mx-auto lg:mx-0'
 									: ''
 							}`}
 							aria-label={`Select ${accountType.name} Account Type`}
@@ -86,7 +86,7 @@ const AccountType = () => {
 				</div>
 
 				<div className='mt-6 text-center'>
-					<p className='text-sm font-inter md:text-lg'>
+					<p className='text-sm font-inter'>
 						Already have an account?{' '}
 						<Link
 							to='/'

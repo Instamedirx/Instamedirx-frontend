@@ -2,12 +2,16 @@ import React from 'react';
 import { HiOutlineArrowLongLeft } from 'react-icons/hi2';
 import { useNavigate } from 'react-router-dom';
 
-const Back = ({styles}) => {
+const Back = ({ styles, onClick }) => {
 	const navigate = useNavigate();
+
+	const handleClick = () => {
+		onClick ? onClick() : navigate(-1);
+	};
 	return (
 		<p
 			className={`text-blue flex items-center gap-2 hover:cursor-pointer ${styles}`}
-			onClick={() => navigate(-1)}
+			onClick={handleClick}
 		>
 			<HiOutlineArrowLongLeft
 				size={30}
