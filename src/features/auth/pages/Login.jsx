@@ -1,6 +1,4 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-
 import Logo from '../../../assets/logo.svg';
 import SideImage from '../../../assets/login/side_image.svg';
 
@@ -8,7 +6,8 @@ import { FaFacebook } from 'react-icons/fa';
 import { FaApple } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 
-import { Button } from '../../../components';
+import {  Button } from '../../../components';
+
 
 const Login = () => {
 	return (
