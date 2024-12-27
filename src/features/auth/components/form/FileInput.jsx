@@ -1,56 +1,80 @@
 import React, { useState } from 'react';
+import { Controller } from 'react-hook-form';
 import { MdOutlineCloudUpload } from 'react-icons/md';
 
-const FileInput = ({ name, label, register, errors }) => {
+const FileInput = ({
+	name,
+	label,
+	errors,
+	control,
+	value,
+	required,
+}) => {
 	const [fileName, setFileName] = useState('');
 
 	const handleFileChange = e => {
 		const file = e.target.files[0];
 		setFileName(file ? file.name : '');
+		value(name, file);
 	};
 
 	return (
-		<div className='flex gap-4'>
-			<p className='block mb-1'>{label}</p>
-			<label
-				htmlFor={name}
-				className='w-56 border-2 border-blue text-gray-400 cursor-pointer rounded-2xl py-2 text-center flex flex-col'
-			>
-				<span>Click to upload file</span>
-				<span className='flex justify-center items-start text-5xl'>
-					<MdOutlineCloudUpload className='fill-gray-400' />
-				</span>
-				<span className='text-xs'>
-					Accepted Format(doc,pdf,jpg,jpeg)
-				</span>
-				{fileName && (
-					<span className='truncate text-xs mt-4'>
-						{fileName}
-					</span>
-				)}
-			</label>
-			<input
-				type='file'
-				className=' hidden text-sm file:py-2 file:px-4 file:border-none'
-				id={name}
-				{...register(name, {
-					onChange: handleFileChange,
-					validate: {
-						required: value =>
-							value?.[0] ? true : 'File is required',
-						fileSize: value =>
-							value?.size < 5 * 1024 * 1024 ||
-							'File should be less than 5MB',
-					},
-				})}
-				accept='.doc, .docx, .pdf, .jpg, .jpeg'
-			/>
-			{errors[name] && (
-				<p className='text-red-500 text-sm mt-1'>
-					{errors[name]?.message}
+		<>
+			<div className='flex gap-4'>
+				<p className='block mb-1'>
+					{label}
+					{required && (
+						<span className='text-red-500 ml-0.5'>*</span>
+					)}
 				</p>
-			)}
-		</div>
+				<label
+					htmlFor={name}
+					className={`w-56 border-2 text-gray-400 cursor-pointer rounded-2xl py-2 text-center flex flex-col ${
+						errors ? 'border-red-500' : 'border-blue'
+					}`}
+				>
+					<span>Click to upload file</span>
+					<span className='flex justify-center items-start text-5xl'>
+						<MdOutlineCloudUpload className='fill-gray-400' />
+					</span>
+					<span className='text-xs'>
+						Accepted Format(doc,pdf,jpg,jpeg)
+					</span>
+					{fileName && (
+						<span className='truncate text-xs mt-4'>
+							{fileName}
+						</span>
+					)}
+				</label>
+				<Controller
+					name={name}
+					control={control}
+					rules={{
+						required: 'Document is required',
+						validate: {
+							fileSize: value =>
+								!value ||
+								value.size < 5 * 1024 * 1024 ||
+								'File should be less than 5MB',
+						},
+					}}
+					render={({ field }) => (
+						<input
+							type='file'
+							className='hidden'
+							id={name}
+							accept='.doc, .docx, .pdf, .jpg, .jpeg'
+							onChange={handleFileChange}
+						/>
+					)}
+				/>
+			</div>
+				{errors && (
+					<p className='text-red-500 text-sm mt-1'>
+						{errors?.message}
+					</p>
+				)}
+		</>
 	);
 };
 

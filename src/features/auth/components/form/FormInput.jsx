@@ -3,18 +3,23 @@ import React from 'react';
 const FormInput = ({
 	labelName,
 	inputType,
-	inputId,
+	name,
 	placeholder,
 	required,
 	validationRules = {},
 	register,
 	errors,
-	handleChange,
+	errorKey
 }) => {
+	const error =
+		errors?.[name] ||
+		errorKey
+			?.split('.')
+			.reduce((acc, key) => acc?.[key], errors);
 	return (
 		<div className='flex flex-col gap-1.5'>
 			<label
-				htmlFor={inputId}
+				htmlFor={name}
 				className='text-sm'
 			>
 				{labelName}
@@ -24,20 +29,19 @@ const FormInput = ({
 			</label>
 			<input
 				type={inputType}
-				id={inputId}
-				onChange={handleChange}
+				id={name}
 				className={`border-2 border-blue rounded-xl py-0.5 px-3 focus:outline-none ${
-					errors[inputId] ? 'border-red-500' : 'border-blue'
+					error ? 'border-red-500' : 'border-blue'
 				}`}
 				placeholder={placeholder}
-				{...register(inputId, {
+				{...register(name, {
 					required: required && `${labelName} is required`,
 					...validationRules,
 				})}
 			/>
-			{errors[inputId] && (
+			{error && (
 				<p className='text-red-500 text-sm'>
-					{errors[inputId].message}
+					{error.message}
 				</p>
 			)}
 		</div>

@@ -6,6 +6,7 @@ const Button = ({
 	styles,
 	type,
 	onClick,
+	disabled,
 }) => {
 	let buttonWidth =
 		size === 's'
@@ -16,9 +17,12 @@ const Button = ({
 
 	return (
 		<button
-			className={`bg-blue text-white font-bold py-1.5 rounded-xl ${buttonWidth} ${styles}`}
+			className={`text-white font-bold py-1.5 rounded-xl ${
+				disabled ? 'bg-gray-300' : 'bg-blue'
+			} ${buttonWidth} ${styles}`}
 			type={type}
 			onClick={onClick && onClick}
+			disabled={disabled}
 		>
 			{children}
 		</button>

@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
-import noficationIcon from "./../../../../../assets/account_selection/image 34.png";
-import mailIcon from "./../../../../../assets/account_selection/image 35.png";
+import NotificationIcon from "./../../../../../assets/account_selection/image 34.png";
+import MailIcon from "./../../../../../assets/account_selection/image 35.png";
 
 const EmailVerification = () => {
   const [isVerified, setIsVerified] = useState(false);
@@ -40,7 +40,7 @@ const EmailVerification = () => {
       {!isVerified ? (
         <div className="bg-white rounded-lg shadow-md p-6 text-center max-w-sm">
           <div className="mb-4 w-10 m-auto">
-            <img src={noficationIcon} alt="Notification Icon" />
+            <img src={NotificationIcon} alt="Notification Icon" />
           </div>
           <h2 className="text-lg font-semibold mb-2">Please verify your email</h2>
           <p className="text-gray-500 text-sm mb-4">
@@ -76,7 +76,7 @@ const EmailVerification = () => {
       ) : (
         <div className="bg-white rounded-lg shadow-md p-6 text-center max-w-sm">
           <div className="w-10 m-auto">
-            <img src={mailIcon} alt="Mail Icon" />
+            <img src={MailIcon} alt="Mail Icon" />
           </div>
           <h2 className="text-lg font-semibold mb-2">Email verified</h2>
           <p className="text-sm mb-4">
