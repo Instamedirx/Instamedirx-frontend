@@ -9,17 +9,24 @@ import { FormInput, Select } from '../components/form';
 import { useForm } from 'react-hook-form';
 import { specializations } from '../../../utils/data';
 import BackgroundColor from '../components/BackgroundColor';
+import { useDispatch, useSelector } from 'react-redux';
+import { store } from '../../../app/store';
+import { setRegistrationDetails } from '../../../app/features/signupSlice';
 
 const RegistrationDetails = () => {
 	const navigate = useNavigate();
-	const { accountType } = useParams();
-	const { state } = useLocation();
+	const dispatch = useDispatch();
+
+	const { selectedAccountType, registrationDetails } =
+		useSelector(state => state.signup);
+
 	const [ethnicity, setEthnicity] = useState('');
 	const [languages, setLanguages] = useState([]);
+
 	const [
 		selectedSpecialization,
 		setSelectedSpecialization,
-	] = useState(null);
+	] = useState(registrationDetails.specialization || null);
 
 	const {
 		register,
@@ -32,22 +39,24 @@ const RegistrationDetails = () => {
 
 	useEffect(() => {
 		// fill up form details with previously populated data if the back button on the qualifications page is clicked
-		if (state?.registrationData) {
-			const data =
-				state.registrationData.registrationDetails;
-
-			Object.keys(data).forEach(key => {
-				console.log(key, data[key]);
-				setValue(key, data[key]);
+		if (registrationDetails) {
+			Object.keys(registrationDetails).forEach(key => {
+				console.log(key, registrationDetails[key]);
+				setValue(key, registrationDetails[key]);
 			});
-			if (data?.specialization) {
-				setSelectedSpecialization(data?.specialization);
+			if (registrationDetails.specialization) {
+				setSelectedSpecialization(
+					registrationDetails.specialization
+				);
 			}
 		}
-	}, [state, setValue]);
+	}, [registrationDetails, setValue]);
 
 	const onSubmit = data => {
-		if (!selectedSpecialization) {
+		if (
+			selectedAccountType === 'doctor' &&
+			!selectedSpecialization
+		) {
 			setError('specialization', {
 				type: 'manual',
 				message: 'Specialization is required',
@@ -55,17 +64,23 @@ const RegistrationDetails = () => {
 			return;
 		}
 
-		const registrationData = {
-			...state.signupData,
-			registrationDetails: {
-				...data,
+		const formData = {
+			...data,
+			...(selectedAccountType === 'doctor' && {
 				specialization: selectedSpecialization,
-			},
+			}),
 		};
-		console.log(registrationData);
-		navigate(`/signup/${accountType}/qualification`, {
-			state: { registrationData },
-		});
+
+		dispatch(setRegistrationDetails(formData));
+		console.log(setRegistrationDetails(formData));
+
+		const updatedState =
+			store.getState().signup.registrationDetails;
+		console.log('formData: ', updatedState);
+
+		navigate(
+			`/signup/${selectedAccountType}/qualification`
+		);
 	};
 
 	return (
@@ -83,14 +98,14 @@ const RegistrationDetails = () => {
 				<form onSubmit={handleSubmit(onSubmit)}>
 					<div className='flex flex-col sm:grid sm:grid-cols-2 gap-6 justify-between'>
 						<FormInput
-							inputId={
-								accountType === 'pharmacist'
+							name={
+								selectedAccountType === 'pharmacist'
 									? 'pharmacy_name'
 									: 'hospital_name'
 							}
 							inputType='text'
 							labelName={
-								accountType === 'pharmacist'
+								selectedAccountType === 'pharmacist'
 									? 'Pharmacy Name'
 									: 'Clinic/Hospital Name(optional)'
 							}
@@ -98,14 +113,14 @@ const RegistrationDetails = () => {
 							register={register}
 						/>
 						<FormInput
-							inputId={
-								accountType === 'pharmacist'
+							name={
+								selectedAccountType === 'pharmacist'
 									? 'pharmacy_address'
 									: 'hospital_address'
 							}
 							inputType='text'
 							labelName={
-								accountType === 'pharmacist'
+								selectedAccountType === 'pharmacist'
 									? 'Pharmacy Address'
 									: 'Clinic/Hospital Address(optional)'
 							}
@@ -113,75 +128,83 @@ const RegistrationDetails = () => {
 							register={register}
 						/>
 						<FormInput
-							inputId={
-								accountType === 'pharmacist'
+							name={
+								selectedAccountType === 'pharmacist'
 									? 'city'
 									: 'zip_code'
 							}
 							inputType='text'
 							labelName={
-								accountType === 'pharmacist'
+								selectedAccountType === 'pharmacist'
 									? 'City'
 									: 'Zip Code'
 							}
 							errors={errors}
 							register={register}
 							required={
-								accountType === 'pharmacist' ? false : true
+								selectedAccountType === 'pharmacist'
+									? false
+									: true
 							}
 						/>
 						<FormInput
-							inputId={
-								accountType === 'pharmacist'
+							name={
+								selectedAccountType === 'pharmacist'
 									? 'zip_code'
 									: 'city'
 							}
 							inputType='text'
 							labelName={
-								accountType === 'pharmacist'
+								selectedAccountType === 'pharmacist'
 									? 'Zip Code'
 									: 'City'
 							}
 							errors={errors}
 							register={register}
 							required={
-								accountType === 'pharmacist' ? false : true
+								selectedAccountType === 'pharmacist'
+									? false
+									: true
 							}
 						/>
 						<FormInput
-							inputId={
-								accountType === 'pharmacist'
+							name={
+								selectedAccountType === 'pharmacist'
 									? 'state'
 									: 'country'
 							}
 							inputType='text'
 							labelName={
-								accountType === 'pharmacist'
+								selectedAccountType === 'pharmacist'
 									? 'State/Province'
 									: 'Country'
 							}
 							errors={errors}
 							register={register}
 							required={
-								accountType === 'pharmacist' ? false : true
+								selectedAccountType === 'pharmacist'
+									? false
+									: true
 							}
 						/>
 						<FormInput
-							inputId={
-								accountType === 'pharmacist'
+							name={
+								selectedAccountType === 'pharmacist'
 									? 'country'
 									: 'state'
 							}
 							inputType='text'
 							labelName={
-								accountType === 'pharmacist'
+								selectedAccountType === 'pharmacist'
 									? 'Country'
 									: 'State/Province'
 							}
 							errors={errors}
 							register={register}
 							required={
-								accountType === 'pharmacist' ? false : true
+								selectedAccountType === 'pharmacist'
+									? false
+									: true
 							}
 						/>
 
@@ -192,7 +215,7 @@ const RegistrationDetails = () => {
 							register={register}
 							errors={errors}
 							// required={
-							// 	accountType === 'pharmacist' ? false : true
+							// 	selectedAccountType === 'pharmacist' ? false : true
 							// }
 						/>
 						<Select
@@ -200,20 +223,20 @@ const RegistrationDetails = () => {
 							label='Spoken Languages'
 							register={register}
 							// required={
-							// 	accountType === 'pharmacist' ? false : true
+							// 	selectedAccountType === 'pharmacist' ? false : true
 							// }
 							errors={errors}
 						/>
 
 						<FormInput
-							inputId={
-								accountType === 'pharmacist'
-									? 'experience'
-									: 'license'
+							name={
+								selectedAccountType === 'pharmacist'
+									? 'years_of_experience'
+									: 'license_number'
 							}
 							inputType='text'
 							labelName={
-								accountType === 'pharmacist'
+								selectedAccountType === 'pharmacist'
 									? 'Years of Experience'
 									: 'Medical License Number'
 							}
@@ -221,14 +244,14 @@ const RegistrationDetails = () => {
 							register={register}
 						/>
 						<FormInput
-							inputId={
-								accountType === 'pharmacist'
-									? 'license'
-									: 'experience'
+							name={
+								selectedAccountType === 'pharmacist'
+									? 'license_number'
+									: 'years_of_experience'
 							}
 							inputType='text'
 							labelName={
-								accountType === 'pharmacist'
+								selectedAccountType === 'pharmacist'
 									? 'Pharmacy License Number'
 									: 'Years of Experience'
 							}
@@ -237,15 +260,14 @@ const RegistrationDetails = () => {
 						/>
 					</div>
 
-					{accountType !== 'pharmacist' && (
+					{selectedAccountType !== 'pharmacist' && (
 						<div className={`my-12 space-y-8`}>
 							<p
 								className={`${
-									errors.specialization &&
-									'text-red-500'
+									errors.specialization && 'text-red-500'
 								}`}
 							>
-								Specialization{' '}
+								Specialization
 								<span className='text-red-500'>*</span>
 							</p>
 
@@ -259,18 +281,18 @@ const RegistrationDetails = () => {
 												? 'border-none bg-blue text-white'
 												: 'border-2 border-blue'
 										}`}
-										{...register('specialization', {
-											required: {
-												value: true,
-												message:
-													'Specialization is required',
-											},
-										})}
+										// {...register('specialization', {
+										// 	required: {
+										// 		value: true,
+										// 		message:
+										// 			'Specialization is required',
+										// 	},
+										// })}
 										onClick={e => {
 											setSelectedSpecialization(
 												specialization
 											);
-											// clearErrors('specialization');
+											clearErrors('specialization');
 										}}
 									>
 										{specialization}

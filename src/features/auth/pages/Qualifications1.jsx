@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
 	FormProvider,
 	useFieldArray,
@@ -11,10 +12,10 @@ import BackgroundColor from '../components/BackgroundColor';
 import {
 	addCertification,
 	addDegree,
+	removeCertification,
+	removeDegree,
+	setQualifications,
 } from '../../../app/features/signupSlice';
-import { useEffect } from 'react';
-import CertificationForm from '../components/form/CertificationForm';
-import QualificationForm from '../components/form/QualificationForm';
 
 const Qualifications = () => {
 	const methods = useForm({
@@ -47,8 +48,6 @@ const Qualifications = () => {
 		register,
 		handleSubmit,
 		control,
-		watch,
-		setValue,
 		formState: { errors },
 	} = methods;
 
@@ -76,7 +75,6 @@ const Qualifications = () => {
 	);
 
 	const convertFileToBase64 = file => {
-		console.log(file);
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
 			reader.readAsDataURL(file);
@@ -89,13 +87,9 @@ const Qualifications = () => {
 		console.log(data);
 		const certifications = await Promise.all(
 			data.certifications.map(async certification => {
-				console.log(certification.document);
-				const base64Document =
-					certification.document instanceof File
-						? await convertFileToBase64(
-								certification.document
-						  )
-						: certification.document;
+				const base64Document = await convertFileToBase64(
+					certification.document[0]
+				);
 				return {
 					...certification,
 					document: base64Document,
@@ -108,10 +102,9 @@ const Qualifications = () => {
 
 		const degrees = await Promise.all(
 			data.degrees.map(async degree => {
-				const base64Document =
-					degree.document[0] instanceof File
-						? await convertFileToBase64(degree.document[0])
-						: degree.document[0];
+				const base64Document = await convertFileToBase64(
+					degree.document[0]
+				);
 				return {
 					...degree,
 					document: base64Document,
@@ -139,20 +132,66 @@ const Qualifications = () => {
 					<form onSubmit={handleSubmit(onSubmit)}>
 						{certificationFields.map(
 							(certification, index) => (
-								<QualificationForm
+								<div
 									key={certification.id}
-									index={index}
-									type='certification'
-									registerElement={register}
-									setValue={setValue}
-									errors={errors}
-									remove={removeCertification}
-									formControl={control}
-								/>
+									className='mb-6'
+								>
+									<h2 className='text-base font-medium'>
+										Certifications/Licenses
+									</h2>
+									<div className='mt-7 space-y-6'>
+										<FormInput
+											inputId={`certifications[${index}].title`}
+											inputType='text'
+											labelName='Title'
+											errors={errors}
+											register={register}
+										/>
+										<FormInput
+											inputId={`certifications[${index}].licenseNumber`}
+											inputType='text'
+											labelName='License Number'
+											errors={errors}
+											register={register}
+										/>
+										<FormInput
+											inputId={`certifications[${index}].issueDate`}
+											inputType='date'
+											labelName='Issue Date'
+											placeholder='Select Date'
+											errors={errors}
+											register={register}
+										/>
+										<FormInput
+											inputId={`certifications[${index}].expirationDate`}
+											inputType='date'
+											labelName='Expiration Date'
+											placeholder='Select Date'
+											errors={errors}
+											register={register}
+										/>
+										<FileInput
+											name={`certifications.${index}.document`}
+											label='Upload Document'
+											register={register}
+											errors={errors}
+										/>
+									</div>
+									{index > 0 && (
+										<button
+											type='button'
+											onClick={() =>
+												removeCertification(index)
+											}
+											className='text-red-500 hover:underline mt-6'
+										>
+											Remove Certification
+										</button>
+									)}
+								</div>
 							)
 						)}
 						<button
-							type='button'
 							onClick={() =>
 								appendCertification({
 									title: '',
@@ -167,35 +206,8 @@ const Qualifications = () => {
 							+ Add more certifications
 						</button>
 
-						{degreeFields.map((degree, index) => (
-							<QualificationForm
-								key={degree.id}
-								index={index}
-								type='degree'
-								registerElement={register}
-								setValue={setValue}
-								errors={errors}
-								remove={removeDegree}
-								formControl={control}
-							/>
-						))}
-						<button
-							type='button'
-							onClick={() =>
-								appendDegree({
-									title: '',
-									institution: '',
-									year: '',
-									document: null,
-								})
-							}
-							className='text-blue mb-6 text-sm font-semibold hover:underline'
-						>
-							+ Add more degrees
-						</button>
-
 						{/* Degrees/Diploma Section */}
-						{/* {degreeFields.map((degree, index) => (
+						{degreeFields.map((degree, index) => (
 							<div
 								key={degree.id}
 								className='mb-6'
@@ -205,21 +217,21 @@ const Qualifications = () => {
 								</h2>
 								<div className='mt-4 space-y-6'>
 									<FormInput
-										name={`degrees[${index}].title`}
+										inputId={`degrees[${index}].title`}
 										inputType='text'
 										labelName='Title'
 										errors={errors}
 										register={register}
 									/>
 									<FormInput
-										name={`degrees[${index}].institution`}
+										inputId={`degrees[${index}].institution`}
 										inputType='text'
 										labelName='Institution'
 										errors={errors}
 										register={register}
 									/>
 									<FormInput
-										name={`degrees[${index}].year`}
+										inputId={`degrees[${index}].year`}
 										inputType='text'
 										labelName='Year'
 										errors={errors}
@@ -255,7 +267,7 @@ const Qualifications = () => {
 							className='text-blue mb-6 text-sm font-semibold hover:underline'
 						>
 							+ Add more degrees
-						</button> */}
+						</button>
 
 						{/* Agreement Checkbox */}
 						<div className='mb-6'>
@@ -278,6 +290,7 @@ const Qualifications = () => {
 								disabled={!agreeToVerification}
 								type='submit'
 								styles='max-w-[300px]'
+								onclick={onSubmit}
 							>
 								Submit
 							</Button>

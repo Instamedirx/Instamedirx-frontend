@@ -6,6 +6,8 @@ import SideImage from '../../../assets/account_selection/side_image.svg';
 import Client from '../../../assets/account_selection/client.svg';
 import Doctor from '../../../assets/account_selection/doctor.svg';
 import Pharmacist from '../../../assets/account_selection/pharmacist.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAccountType } from '../../../app/features/signupSlice';
 
 const AccountType = () => {
 	const accountTypes = [
@@ -26,11 +28,15 @@ const AccountType = () => {
 		},
 	];
 
-	const [selectedType, setSelectedType] = useState('');
+	const dispatch = useDispatch();
+	const selectedType = useSelector(
+		state => state.signup.selectedAccountType
+	);
+
 	const navigate = useNavigate();
 
 	const handleClick = type => {
-		setSelectedType(type.name);
+		dispatch(setAccountType(type.name.toLowerCase()));
 		navigate(type.route);
 	};
 
@@ -80,7 +86,9 @@ const AccountType = () => {
 									height={40}
 								/>
 							</div>
-							<p className='font-bold text-xl'>{accountType.name}</p>
+							<p className='font-bold text-xl'>
+								{accountType.name}
+							</p>
 						</div>
 					))}
 				</div>

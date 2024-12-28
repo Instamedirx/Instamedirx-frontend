@@ -10,27 +10,46 @@ import ClientImage from '../../../assets/client_signup_image.svg';
 import { FormInput } from '../components/form';
 import { useForm } from 'react-hook-form';
 import BackgroundColor from '../components/BackgroundColor';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFormData } from '../../../app/features/signupSlice';
+import { store } from '../../../app/store';
 
 const Signup = () => {
 	const { accountType } = useParams();
+	const dispatch = useDispatch();
 	const navigate = useNavigate();
+
+	const signupData = useSelector(
+		state => state.signup.signupData
+	);
+
 	const {
 		register,
 		handleSubmit,
 		watch,
+		setValue,
 		formState: { errors },
 	} = useForm();
 
+	useEffect(() => {
+		if (signupData) {
+			Object.keys(signupData).forEach(key => {
+				setValue(key, signupData[key]);
+			});
+		}
+	}, [signupData, setValue]);
+
 	const onSubmit = data => {
 		console.log(`Form Data ${JSON.stringify(data)}`);
-		const signupData = data;
+		dispatch(setFormData(data));
+		
+		console.log(setFormData(data));
+		const updatedState = store.getState().signup.signupData;
+		console.log('formData: ', updatedState);
+
 		accountType === 'client'
-			? navigate(`/signup/${accountType}/verification`, {
-					state: { signupData, accountType },
-			  })
-			: navigate(`/signup/${accountType}/registration`, {
-					state: { signupData, accountType },
-			  });
+			? navigate(`/signup/${accountType}/verification`)
+			: navigate(`/signup/${accountType}/registration`);
 	};
 
 	const accountTitles = {
@@ -62,7 +81,7 @@ const Signup = () => {
 						onSubmit={handleSubmit(onSubmit)}
 					>
 						<FormInput
-							inputId='first_name'
+							name='first_name'
 							inputType='text'
 							labelName='First Name'
 							register={register}
@@ -70,7 +89,7 @@ const Signup = () => {
 							required
 						/>
 						<FormInput
-							inputId='last_name'
+							name='last_name'
 							inputType='text'
 							labelName='Last Name'
 							register={register}
@@ -78,7 +97,7 @@ const Signup = () => {
 							required
 						/>
 						<FormInput
-							inputId='email'
+							name='email'
 							inputType='email'
 							labelName='Email Address'
 							register={register}
@@ -92,7 +111,7 @@ const Signup = () => {
 							required
 						/>
 						<FormInput
-							inputId='phone'
+							name='phone'
 							inputType='tel'
 							labelName='Phone Number'
 							register={register}
@@ -106,7 +125,7 @@ const Signup = () => {
 							required
 						/>
 						<FormInput
-							inputId='password'
+							name='password'
 							inputType='password'
 							labelName='Password'
 							register={register}
@@ -121,7 +140,7 @@ const Signup = () => {
 							required
 						/>
 						<FormInput
-							inputId='confirm_password'
+							name='confirm_password'
 							inputType='password'
 							labelName='Confirm Password'
 							register={register}
