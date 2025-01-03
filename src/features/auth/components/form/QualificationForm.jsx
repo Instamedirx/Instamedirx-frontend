@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import { Controller } from 'react-hook-form';
-import { MdOutlineCloudUpload } from 'react-icons/md';
+import React from 'react';
 import FormInput from './FormInput';
 import FileInput from './FileInput';
 
