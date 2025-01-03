@@ -4,16 +4,13 @@ import {
 	useForm,
 } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Back, Button, Card } from '../../../components';
-import { FileInput, FormInput } from '../components/form';
 import BackgroundColor from '../components/BackgroundColor';
 import {
 	addCertification,
 	addDegree,
 } from '../../../app/features/signupSlice';
-import { useEffect } from 'react';
-import CertificationForm from '../components/form/CertificationForm';
 import QualificationForm from '../components/form/QualificationForm';
 
 const Qualifications = () => {
@@ -76,7 +73,6 @@ const Qualifications = () => {
 	);
 
 	const convertFileToBase64 = file => {
-		console.log(file);
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
 			reader.readAsDataURL(file);
@@ -86,15 +82,14 @@ const Qualifications = () => {
 	};
 
 	const onSubmit = async data => {
-		console.log(data);
+		console.log(data.degree);
 		const certifications = await Promise.all(
 			data.certifications.map(async certification => {
-				console.log(certification.document);
 				const base64Document =
 					certification.document instanceof File
 						? await convertFileToBase64(
 								certification.document
-						  )
+						)
 						: certification.document;
 				return {
 					...certification,
@@ -109,9 +104,9 @@ const Qualifications = () => {
 		const degrees = await Promise.all(
 			data.degrees.map(async degree => {
 				const base64Document =
-					degree.document[0] instanceof File
-						? await convertFileToBase64(degree.document[0])
-						: degree.document[0];
+					degree.document instanceof File
+						? await convertFileToBase64(degree.document)
+						: degree.document;
 				return {
 					...degree,
 					document: base64Document,
@@ -193,69 +188,6 @@ const Qualifications = () => {
 						>
 							+ Add more degrees
 						</button>
-
-						{/* Degrees/Diploma Section */}
-						{/* {degreeFields.map((degree, index) => (
-							<div
-								key={degree.id}
-								className='mb-6'
-							>
-								<h2 className='text-lg font-medium'>
-									Degrees/Diploma
-								</h2>
-								<div className='mt-4 space-y-6'>
-									<FormInput
-										name={`degrees[${index}].title`}
-										inputType='text'
-										labelName='Title'
-										errors={errors}
-										register={register}
-									/>
-									<FormInput
-										name={`degrees[${index}].institution`}
-										inputType='text'
-										labelName='Institution'
-										errors={errors}
-										register={register}
-									/>
-									<FormInput
-										name={`degrees[${index}].year`}
-										inputType='text'
-										labelName='Year'
-										errors={errors}
-										register={register}
-									/>
-									<FileInput
-										name={`degrees.${index}.document`}
-										label='Upload Document'
-										register={register}
-										errors={errors}
-									/>
-								</div>
-								{index > 0 && (
-									<button
-										type='button'
-										onClick={() => removeDegree(index)}
-										className='text-red-500 hover:underline mt-6'
-									>
-										Remove Degree
-									</button>
-								)}
-							</div>
-						))}
-						<button
-							onClick={() =>
-								appendDegree({
-									title: '',
-									institution: '',
-									year: '',
-									document: null,
-								})
-							}
-							className='text-blue mb-6 text-sm font-semibold hover:underline'
-						>
-							+ Add more degrees
-						</button> */}
 
 						{/* Agreement Checkbox */}
 						<div className='mb-6'>

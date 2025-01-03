@@ -44,9 +44,8 @@ const signupSlice = createSlice({
 			);
 		},
 		removeDegree: (state, action) => {
-			state.qualificationDetails.degrees.splice(
-				action.payload,
-				1
+			state.qualificationDetails.degrees.filter(
+				(cert, index) => index !== action.payload
 			);
 		},
 	},
