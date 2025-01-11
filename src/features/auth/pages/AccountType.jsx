@@ -8,6 +8,7 @@ import Doctor from '../../../assets/account_selection/doctor.svg';
 import Pharmacist from '../../../assets/account_selection/pharmacist.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAccountType } from '../../../app/features/signupSlice';
+import { useSetRoleMutation } from '../../../app/services/apiSlice';
 
 const AccountType = () => {
 	const accountTypes = [
@@ -33,11 +34,28 @@ const AccountType = () => {
 		state => state.signup.selectedAccountType
 	);
 
+	const [setRole, { isLoading, error }] =
+		useSetRoleMutation();
+
 	const navigate = useNavigate();
 
-	const handleClick = type => {
+	const handleClick = async type => {
 		dispatch(setAccountType(type.name.toLowerCase()));
 		navigate(type.route);
+
+		// try {
+		// 	const response = await setRole(
+		// 		type.name.toLowerCase()
+		// 	).unwrap();
+
+		// 	console.log(response.message);
+		// 	navigate(type.route);
+		// } catch (error) {
+		// 	console.error(
+		// 		error?.data?.error || 'An error occured'
+		// 	);
+		// 	alert(error?.data?.error || 'Failed to set role');
+		// }
 	};
 
 	return (
@@ -60,7 +78,7 @@ const AccountType = () => {
 					</p>
 				</div>
 
-				<div className='my-14 grid grid-cols-2 lg:flex max-w-2xl md:gap-8 md:justify-center place-items-center gap-y-8 gap-x-6'>
+				<div className='my-14 flex flex-col xs:grid xs:grid-cols-2 lg:flex lg:flex-row max-w-2xl md:gap-8 md:justify-center place-items-center gap-y-8 gap-x-6'>
 					{accountTypes.map((accountType, index) => (
 						<div
 							key={index}

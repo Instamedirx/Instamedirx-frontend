@@ -3,11 +3,6 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
 	selectedAccountType: '',
 	signupData: {},
-	registrationDetails: {},
-	qualificationDetails: {
-		certifications: [],
-		degrees: [],
-	},
 };
 
 const signupSlice = createSlice({
@@ -15,38 +10,53 @@ const signupSlice = createSlice({
 	initialState,
 	reducers: {
 		setAccountType: (state, action) => {
-			state.selectedAccountType = action.payload;
+			const accountType = action.payload;
+			state.selectedAccountType = accountType;
+
+			if (accountType !== 'client') {
+				state.registrationDetails = {};
+				state.qualificationDetails = {
+					certification: [],
+					degrees: [],
+				};
+			}
 		},
 		setFormData: (state, action) => {
 			state.signupData = action.payload;
 		},
 		setRegistrationDetails: (state, action) => {
-			state.registrationDetails = action.payload;
+			if (state.registrationDetails)
+				state.registrationDetails = action.payload;
 		},
 		setQualifications: (state, action) => {
-			console.log('Payload: ', action.payload);
-			state.qualificationDetails = action.payload;
+			if (state.qualificationDetails)
+				state.qualificationDetails = action.payload;
 		},
 		addCertification: (state, action) => {
-			state.qualificationDetails.certifications.push(
-				action.payload
-			);
-		},
-		removeCertification: (state, action) => {
-			state.qualificationDetails.certifications =
-				state.qualificationDetails.certifications.filter(
-					(cert, index) => index !== action.payload
+			if (state.qualificationDetails.certifications)
+				state.qualificationDetails.certifications.push(
+					action.payload
 				);
 		},
+		removeCertification: (state, action) => {
+			if (state.qualificationDetails)
+				state.qualificationDetails.certifications =
+					state.qualificationDetails.certifications.filter(
+						(_, index) => index !== action.payload
+					);
+		},
 		addDegree: (state, action) => {
-			state.qualificationDetails.degrees.push(
-				action.payload
-			);
+			if (state.qualificationDetails)
+				state.qualificationDetails.degrees.push(
+					action.payload
+				);
 		},
 		removeDegree: (state, action) => {
-			state.qualificationDetails.degrees.filter(
-				(cert, index) => index !== action.payload
-			);
+			if (state.qualificationDetails)
+				state.qualificationDetails.degrees =
+					state.qualificationDetails.degrees.filter(
+						(_, index) => index !== action.payload
+					);
 		},
 	},
 });

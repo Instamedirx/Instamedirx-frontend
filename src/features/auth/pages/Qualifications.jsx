@@ -82,7 +82,6 @@ const Qualifications = () => {
 	};
 
 	const onSubmit = async data => {
-		console.log(data.degree);
 		const certifications = await Promise.all(
 			data.certifications.map(async certification => {
 				const base64Document =
