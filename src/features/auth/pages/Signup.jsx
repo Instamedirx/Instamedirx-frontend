@@ -59,11 +59,11 @@ const Signup = () => {
 	};
 
 	const clientPageStyles =
-		accountType === 'client' && 'px-10 gap-8';
+		accountType === 'client' && 'gap-8';
 
 	return (
 		<section
-			className={`relative py-5 flex justify-center ${clientPageStyles}`}
+			className={`relative py-5 flex justify-center items-center border border-red-500 h-full container mx-auto ${clientPageStyles}`}
 		>
 			<div className='max-w-3xl lg:w-1/2 sm:w-2/3 flex justify-center items-center'>
 				<Card styles='lg:w-5/6 sm:w-4/5 pt-2 px-5 pb-7 font-inria-serif'>
