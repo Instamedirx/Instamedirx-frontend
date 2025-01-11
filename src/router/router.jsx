@@ -5,8 +5,8 @@ import {
 	Qualifications,
 	RegistrationDetails,
 	Signup,
-} from '../features/auth/pages';
-import EmailVerification from '../features/auth/pages/client/pages/EmailVerification';
+} from '../features/Auth/pages';
+import EmailVerification from '../features/Auth/pages/client/pages/EmailVerification';
 
 const router = createBrowserRouter([
 	{
