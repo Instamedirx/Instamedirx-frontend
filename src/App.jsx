@@ -1,4 +1,4 @@
-import Login from './features/auth/pages/Login';
+import Login from './features/Auth/pages/Login';
 
 const App = () => {
 	return (
