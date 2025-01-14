@@ -3,9 +3,13 @@ export default {
 	content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
 	theme: {
 		extend: {
+			borderWidth: {
+				'1.5': '1.5px'
+			},
 			colors: {
 				blue: '#007AFF',
 				'light-blue': '#2080e8',
+				dashboard: '#CEE0FF',
 			},
 			fontFamily: {
 				inter: ['Inter', 'sans-serif'],

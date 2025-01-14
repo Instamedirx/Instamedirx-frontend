@@ -1,4 +1,7 @@
-import { createBrowserRouter } from 'react-router-dom';
+import {
+	createBrowserRouter,
+	Navigate,
+} from 'react-router-dom';
 import App from '../App';
 import {
 	AccountType,
@@ -7,6 +10,8 @@ import {
 	Signup,
 } from '../features/Auth/pages';
 import EmailVerification from '../features/Auth/pages/client/pages/EmailVerification';
+import ProtectedRoutes from '../features/Dashboards/ProtectedRoutes';
+import DashboardLayout from '../features/Dashboards/layouts/DashboardLayout';
 
 const router = createBrowserRouter([
 	{
@@ -32,6 +37,14 @@ const router = createBrowserRouter([
 	{
 		path: '/signup/:accountType/qualification',
 		element: <Qualifications />,
+	},
+	{
+		path: '/dashboard',
+		element: (
+			<ProtectedRoutes>
+				<DashboardLayout />
+			</ProtectedRoutes>
+		),
 	},
 ]);
 

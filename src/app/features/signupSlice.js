@@ -13,6 +13,8 @@ const signupSlice = createSlice({
 			const accountType = action.payload;
 			state.selectedAccountType = accountType;
 
+			localStorage.setItem('selectedAccountType', accountType);
+
 			if (accountType !== 'client') {
 				state.registrationDetails = {};
 				state.qualificationDetails = {
