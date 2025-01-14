@@ -1,11 +1,8 @@
-import Login from './features/Auth/pages/Login';
 
-const App = () => {
-	return (
-		<main>
-			<Login />
-		</main>
-	);
-};
+import { RouterProvider } from "react-router-dom";
+import router from "./router"; 
+function App() {
+  return <RouterProvider router={router} />;
+}
 
 export default App;
