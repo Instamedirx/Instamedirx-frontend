@@ -5,7 +5,10 @@ export default {
 		extend: {
 			colors: {
 				blue: '#007AFF',
-				'light-blue': '#2080e8',
+				primary: '#043380',
+				gray:'#2E2E38',
+				yellow:'#9F9900',
+				lightBlue: '#2080e8',
 			},
 			fontFamily: {
 				inter: ['Inter', 'sans-serif'],
