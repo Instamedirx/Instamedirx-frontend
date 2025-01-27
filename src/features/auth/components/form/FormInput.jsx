@@ -9,7 +9,7 @@ const FormInput = ({
 	validationRules = {},
 	register,
 	errors,
-	errorKey
+	errorKey,
 }) => {
 	const error =
 		errors?.[name] ||
@@ -20,12 +20,11 @@ const FormInput = ({
 		<div className='flex flex-col gap-1.5'>
 			<label
 				htmlFor={name}
-				className='text-sm'
+				className={`text-sm ${
+					required && "after:content-['*'] after:ml-0.5 after:text-red-500"
+				}`}
 			>
 				{labelName}
-				{required && (
-					<span className='text-red-500 ml-0.5'>*</span>
-				)}
 			</label>
 			<input
 				type={inputType}

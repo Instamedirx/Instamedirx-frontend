@@ -1,11 +1,25 @@
-import React from 'react'
+import React from 'react';
+import { IconContext } from 'react-icons';
 
-const Icons = ({icon}) => {
-  return (
-    <div>
-      {icon}
-    </div>
-  )
-}
+const Icons = ({
+	Icon,
+	size = 24,
+	styles,
+	color,
+	onClick,
+}) => {
+	return (
+		<IconContext.Provider
+			value={{
+				size,
+			}}
+		>
+			<Icon
+				className={`text-blue ${styles}`}
+				onClick={onClick && onClick}
+			/>
+		</IconContext.Provider>
+	);
+};
 
-export default Icons
+export default Icons;

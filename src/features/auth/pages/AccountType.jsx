@@ -85,8 +85,8 @@ const AccountType = () => {
 							onClick={() => handleClick(accountType)}
 							className={`flex flex-col gap-4 justify-center items-center w-full max-w-[200px] py-6 shadow-[0px_4px_8px_0px_rgba(0,0,0,0.25)] rounded-3xl bg-[#FFFCFC] cursor-pointer transition duration-300 ${
 								selectedType === accountType.name
-									? 'bg-blue-100 shadow-md'
-									: 'bg-blue-50 hover:shadow-md hover:bg-blue-100'
+									? 'shadow-md'
+									: 'hover:shadow-md'
 							} ${
 								index === accountTypes.length - 1 &&
 								accountTypes.length % 2 !== 0

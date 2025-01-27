@@ -265,10 +265,9 @@ const RegistrationDetails = () => {
 							<p
 								className={`${
 									errors.specialization && 'text-red-500'
-								}`}
+								} after:content-['*'] after:ml-0.5 after:text-red-500`}
 							>
 								Specialization
-								<span className='text-red-500'>*</span>
 							</p>
 
 							<div className='grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-8'>

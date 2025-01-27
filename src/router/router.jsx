@@ -11,7 +11,8 @@ import {
 } from '../features/Auth/pages';
 import EmailVerification from '../features/Auth/pages/client/pages/EmailVerification';
 import ProtectedRoutes from '../features/Dashboards/ProtectedRoutes';
-import DashboardLayout from '../features/Dashboards/layouts/DashboardLayout';
+import DashboardLayout from '../features/Dashboards/layouts/DashboardRoutes';
+import clientRoutes from 'features/Dashboards/Client/router';
 
 const router = createBrowserRouter([
 	{
@@ -45,6 +46,7 @@ const router = createBrowserRouter([
 				<DashboardLayout />
 			</ProtectedRoutes>
 		),
+		children: clientRoutes
 	},
 ]);
 
