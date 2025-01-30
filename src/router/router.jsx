@@ -13,7 +13,7 @@ import EmailVerification from '../features/Auth/pages/client/pages/EmailVerifica
 import ProtectedRoutes from '../features/Dashboards/ProtectedRoutes';
 import DashboardLayout from '../features/Dashboards/layouts/DashboardRoutes';
 import clientRoutes from 'features/Dashboards/Client/router';
-
+import AllDoctors from 'features/Dashboards/Client/components/AllDoctors';
 const router = createBrowserRouter([
 	{
 		path: '/',
@@ -40,10 +40,19 @@ const router = createBrowserRouter([
 		element: <Qualifications />,
 	},
 	{
+		path: '/dashboard/All doctors',
+		element: (
+			<ProtectedRoutes>
+				<AllDoctors/>
+			</ProtectedRoutes>
+		),
+	},
+	{
 		path: '/dashboard',
 		element: (
 			<ProtectedRoutes>
 				<DashboardLayout />
+				
 			</ProtectedRoutes>
 		),
 		children: clientRoutes

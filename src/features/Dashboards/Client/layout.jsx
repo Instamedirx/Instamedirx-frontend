@@ -4,6 +4,7 @@ import SideBar from './components/SideBar';
 import { Outlet } from 'react-router-dom';
 import MobileNav from './components/MobileNav';
 
+
 const ClientLayout = () => {
 	const [headerHeight, setHeaderHeight] = useState(0);
 	const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -118,6 +119,8 @@ const ClientLayout = () => {
 					}}
 				>
 					<Outlet />
+					
+					
 				</main>
 			</div>
 		</div>
