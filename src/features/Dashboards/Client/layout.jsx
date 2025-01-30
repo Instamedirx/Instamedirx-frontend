@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
-import TopBar from './components/TopBar';
-import SideBar from './components/SideBar';
+import TopBar from './components/Layout/TopBar';
+import SideBar from './components/Layout/SideBar';
 import { Outlet } from 'react-router-dom';
-import MobileNav from './components/MobileNav';
+import MobileNav from './components/Layout/MobileNav';
 
 const ClientLayout = () => {
 	const [headerHeight, setHeaderHeight] = useState(0);
@@ -53,7 +53,7 @@ const ClientLayout = () => {
 	}, []);
 
 	return (
-		<div className='flex flex-col bg-white xs:bg-blue-95'>
+		<div className='flex flex-col bg-white xs:bg-blue-99'>
 			{/* TODO: TOP BAR */}
 			<header
 				className='bg-blue-99 xs:bg-white w-full rounded-b-2xl xs:rounded-none py-5 xs:py-8 flex flex-col lg:flex-row fixed top-0 z-50'

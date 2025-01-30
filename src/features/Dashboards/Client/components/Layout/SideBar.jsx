@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import {
+	FaAnglesLeft,
+	FaAnglesRight,
+} from 'react-icons/fa6';
+
 import NavItem from 'features/Dashboards/components/NavItem';
 import {
 	mobileNavLinks,
@@ -11,24 +16,14 @@ const SideBar = ({ isSidebarOpen, toggleSidebar }) => {
 
 	const [isCollapsed, setIsCollapsed] = useState(false);
 
-	useEffect(() => {
-		const collapsedRoutes = [
-			'/dashboard/bookings',
-			'/dashboard/pharmacy',
-		];
-		setIsCollapsed(
-			collapsedRoutes.includes(location.pathname)
-		);
-	}, [location.pathname]);
-
 	return (
 		<nav
-			className={`hidden xs:flex h-full overflow-y-auto transform transition-transform duration-300 pb-3 scrollbar-webkit ${
+			className={`hidden xs:flex h-full overflow-y-auto transform transition-transform duration-300 scrollbar-webkit ${
 				isSidebarOpen
 					? 'translate-x-0'
 					: '-translate-x-full'
 			} md:translate-x-0 md:block ${
-				isCollapsed ? 'w-fit' : 'w-52'
+				isCollapsed ? 'w-fit py-6' : 'w-52'
 			}`}
 			style={{
 				backgroundColor:
@@ -41,6 +36,16 @@ const SideBar = ({ isSidebarOpen, toggleSidebar }) => {
 					'blur(2px)',
 			}}
 		>
+			<button
+				className='absolute top-4 right-6 p-1 z-10 text-blue-40'
+				onClick={() => setIsCollapsed(!isCollapsed)}
+			>
+				{isCollapsed ? (
+					<FaAnglesRight size={19} />
+				) : (
+					<FaAnglesLeft size={19} />
+				)}
+			</button>
 			{/* Menu Items */}
 			<div
 				className={`flex flex-col pt-14 px-2 gap-5 ${
@@ -66,7 +71,10 @@ const SideBar = ({ isSidebarOpen, toggleSidebar }) => {
 									: ''
 							}`}
 							onClick={() => {
-								if(window.innerWidth >= 520 && window.innerWidth <= 768) {
+								if (
+									window.innerWidth >= 520 &&
+									window.innerWidth <= 768
+								) {
 									toggleSidebar();
 								}
 							}}

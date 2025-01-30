@@ -1,10 +1,13 @@
+import { MantineProvider } from '@mantine/core';
 import Login from './features/Auth/pages/Login';
 
 const App = () => {
 	return (
-		<main>
-			<Login />
-		</main>
+		<MantineProvider>
+			<main>
+				<Login />
+			</main>
+		</MantineProvider>
 	);
 };
 
