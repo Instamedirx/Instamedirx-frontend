@@ -5,7 +5,6 @@ const Icons = ({
 	Icon,
 	size = 24,
 	styles,
-	color,
 	onClick,
 }) => {
 	return (

@@ -11,6 +11,8 @@ import { HiOutlineUser } from 'react-icons/hi2';
 import { PiChatCircleText } from 'react-icons/pi';
 import { RxHamburgerMenu } from 'react-icons/rx';
 
+import { TbVideo } from 'react-icons/tb';
+
 export const topBarIcons = [
 	{
 		Icon: IoMdNotificationsOutline,
@@ -100,5 +102,18 @@ export const mobileNavLinks = [
 	{
 		title: 'Support',
 		path: '/dashboard/support',
+	},
+];
+
+export const profileIcons = [
+	{
+		label: 'Message',
+		icon: PiChatCircleText,
+		// path: '/dashboard/messages/:id',
+	},
+	{
+		label: 'Call',
+		icon: TbVideo,
+		// path: '/dashboard/messages/:id',
 	},
 ];

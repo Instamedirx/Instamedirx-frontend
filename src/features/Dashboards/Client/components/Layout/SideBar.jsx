@@ -6,15 +6,17 @@ import {
 } from 'react-icons/fa6';
 
 import NavItem from 'features/Dashboards/components/NavItem';
-import {
-	mobileNavLinks,
-	sidebarLinks,
-} from 'utils/menuIcons';
+import { sidebarLinks } from 'utils/menuIcons';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleSidebar } from 'app/features/sidebarSlice';
 
-const SideBar = ({ isSidebarOpen, toggleSidebar }) => {
+const SideBar = ({ isSidebarOpen }) => {
 	const location = useLocation();
+	const dispatch = useDispatch();
 
-	const [isCollapsed, setIsCollapsed] = useState(false);
+	const isCollapsed = useSelector(
+		state => state.sidebar.isCollapsed
+	);
 
 	return (
 		<nav
@@ -38,7 +40,7 @@ const SideBar = ({ isSidebarOpen, toggleSidebar }) => {
 		>
 			<button
 				className='absolute top-4 right-6 p-1 z-10 text-blue-40'
-				onClick={() => setIsCollapsed(!isCollapsed)}
+				onClick={() => dispatch(toggleSidebar())}
 			>
 				{isCollapsed ? (
 					<FaAnglesRight size={19} />

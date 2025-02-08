@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import signupReducer from './features/signupSlice';
-import { apiSlice } from './services/apiSlice';
+import sidebarReducer from './features/sidebarSlice';
+import { loginApiSlice } from './services/loginApiSlice';
+import { setupListeners } from '@reduxjs/toolkit/query';
 
 const preloadedState = {
 	signup: {
@@ -13,9 +15,12 @@ const preloadedState = {
 export const store = configureStore({
 	reducer: {
 		signup: signupReducer,
-		[apiSlice.reducerPath]: apiSlice.reducer,
+		sidebar: sidebarReducer,
+		[loginApiSlice.reducerPath]: loginApiSlice.reducer,
 	},
 	preloadedState,
 	middleware: getDefaultMiddleware =>
-		getDefaultMiddleware().concat(apiSlice.middleware),
+		getDefaultMiddleware().concat(loginApiSlice.middleware),
 });
+
+setupListeners(store.dispatch);

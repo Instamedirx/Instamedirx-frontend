@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 import { Carousel } from '@mantine/carousel';
 import Stories from 'react-insta-stories';
@@ -6,12 +6,29 @@ import Stories from 'react-insta-stories';
 import { storyData } from 'utils/data';
 
 const StoriesCarousel = () => {
-	const [currentStory, setCurrentStory] = useState(null);
+	const [currentStoryIndex, setCurrentStoryIndex] =
+		useState(null);
 	const [isStoryOpen, setIsStoryOpen] = useState(false);
 
-	const handleOpenStories = stories => {
-		setCurrentStory(stories);
+	const carouselRef = useRef();
+
+	const handleOpenStories = index => {
+		setCurrentStoryIndex(index);
 		setIsStoryOpen(true);
+	};
+
+	const handleNextUser = () => {
+		if (currentStoryIndex < storyData.length - 1) {
+			setCurrentStoryIndex(currentStoryIndex + 1);
+		} else {
+			setIsStoryOpen(false);
+		}
+	};
+
+	const handlePrevUser = () => {
+		if (currentIndex > 0) {
+			setCurrentStoryIndex(currentStoryIndex - 1);
+		}
 	};
 
 	return (
@@ -22,7 +39,7 @@ const StoriesCarousel = () => {
 				dragFree
 				withControls
 				controlSize={20}
-        containScroll='keepSnaps'
+				containScroll='keepSnaps'
 				styles={{
 					controls: {
 						position: 'absolute',
@@ -50,10 +67,8 @@ const StoriesCarousel = () => {
 							className='flex justify-center'
 						>
 							<div
-								className='relative w-28 gap-1 rounded-lg cursor-pointer flex flex-col items-center'
-								onClick={() =>
-									handleOpenStories(user.stories)
-								}
+								className='relative w-28 gap-1 rounded-lg cursor-pointer flex flex-col items-center group'
+								onClick={() => handleOpenStories(index)}
 							>
 								<img
 									src={user.avatar}
@@ -71,13 +86,13 @@ const StoriesCarousel = () => {
 				})}
 			</Carousel>
 
-			{isStoryOpen && (
+			{isStoryOpen && currentStoryIndex !== null && (
 				<div className='fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50'>
 					<div className='w-full max-w-md'>
 						<Stories
-							stories={currentStory}
+							stories={storyData[currentStoryIndex].stories}
 							defaultInterval={5000}
-							onAllStoriesEnd={() => setIsStoryOpen(false)}
+							onAllStoriesEnd={handleNextUser}
 							onClose={() => setIsStoryOpen(false)}
 						/>
 					</div>

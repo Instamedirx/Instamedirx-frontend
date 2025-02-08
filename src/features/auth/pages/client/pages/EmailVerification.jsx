@@ -2,12 +2,20 @@ import { useState, useRef } from 'react';
 import NotificationIcon from './../../../../../assets/account_selection/image 34.png';
 import MailIcon from './../../../../../assets/account_selection/image 35.png';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useVerifyCodeMutation } from 'app/services/loginApiSlice';
 
 const EmailVerification = () => {
 	const [isVerified, setIsVerified] = useState(false);
 	const [code, setCode] = useState(Array(6).fill(''));
 	const inputRefs = useRef([]);
-  const navigate = useNavigate();
+	const navigate = useNavigate();
+	const email = useSelector(
+		state => state.signup.signupData?.email
+	);
+
+	const [verifyCode, { isLoading, error }] =
+		useVerifyCodeMutation();
 
 	const handleInputChange = (value, index) => {
 		const newCode = [...code];
@@ -31,11 +39,24 @@ const EmailVerification = () => {
 		}
 	};
 
-	const handleVerify = () => {
-		if (code.join('').length === 6) {
+	const handleVerify = async () => {
+		const verificationCode = code.join('');
+		if (verificationCode.length !== 6) {
+			alert('Please enter a 6 digit code');
+			return;
+		}
+		console.log(verificationCode);
+
+		try {
+			const response = await verifyCode({
+				code: verificationCode,
+			}).unwrap();
+			console.log('Verification Successful', response);
+			alert('Email verified successfully');
 			setIsVerified(true);
-		} else {
-			alert('Please enter a 6-digit code.');
+		} catch (error) {
+			console.log('Verification failed: ', error);
+			alert(error?.data?.error || 'Verification failed');
 		}
 	};
 
@@ -60,9 +81,7 @@ const EmailVerification = () => {
 					</h2>
 					<p className='text-gray-500 text-sm mb-4'>
 						We’ve sent a code to <br />
-						<span className='font-bold'>
-							youremail@gmail.com
-						</span>
+						<span className='font-bold'>{email}</span>
 					</p>
 					<div className='flex justify-center gap-2 mb-4'>
 						{code.map((digit, index) => (
@@ -82,14 +101,14 @@ const EmailVerification = () => {
 					</div>
 					<button
 						onClick={handleVerify}
-						disabled={isButtonDisabled}
+						disabled={isLoading}
 						className={`px-4 py-2 rounded-lg font-semibold text-white ${
 							isButtonDisabled
 								? 'bg-gray-300 cursor-not-allowed'
 								: 'bg-blue hover:bg-blue-600'
 						}`}
 					>
-						Verify
+						{isLoading ? 'Verifying...' : 'Verify'}
 					</button>
 				</div>
 			) : (

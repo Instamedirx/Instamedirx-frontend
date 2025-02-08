@@ -3,11 +3,9 @@ import Login from './features/Auth/pages/Login';
 
 const App = () => {
 	return (
-		<MantineProvider>
-			<main>
-				<Login />
-			</main>
-		</MantineProvider>
+		<main>
+			<Login />
+		</main>
 	);
 };
 

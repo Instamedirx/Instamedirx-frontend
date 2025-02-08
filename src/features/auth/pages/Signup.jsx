@@ -13,6 +13,11 @@ import BackgroundColor from '../components/BackgroundColor';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFormData } from '../../../app/features/signupSlice';
 import { store } from '../../../app/store';
+import {
+	useCreateUserMutation,
+	useSendVerificationCodeMutation,
+} from 'app/services/loginApiSlice';
+import PhoneNumberInput from '../components/form/PhoneNumberInput';
 
 const Signup = () => {
 	const { accountType } = useParams();
@@ -23,11 +28,18 @@ const Signup = () => {
 		state => state.signup.signupData
 	);
 
+	const [createUser, { isLoading, error }] =
+		useCreateUserMutation();
+
+	const [sendVerificationCode] =
+		useSendVerificationCodeMutation();
+
 	const {
 		register,
 		handleSubmit,
 		watch,
 		setValue,
+		trigger,
 		formState: { errors },
 	} = useForm();
 
@@ -39,17 +51,32 @@ const Signup = () => {
 		}
 	}, [signupData, setValue]);
 
-	const onSubmit = data => {
-		console.log(`Form Data ${JSON.stringify(data)}`);
-		dispatch(setFormData(data));
-		
-		console.log(setFormData(data));
-		const updatedState = store.getState().signup.signupData;
-		console.log('formData: ', updatedState);
+	const onSubmit = async data => {
+		console.log('submitting form');
+		const { confirmPassword, ...filteredData } = data;
+		const formData = { ...filteredData, role: accountType };
+		console.log(formData);
+		try {
+			const response = await createUser(formData).unwrap();
+			console.log('user created', response);
 
-		accountType === 'client'
-			? navigate(`/signup/${accountType}/verification`)
-			: navigate(`/signup/${accountType}/registration`);
+			await sendVerificationCode(response.user.email);
+			console.log(
+				'Verification Code sent to ',
+				response.user.email
+			);
+
+			dispatch(setFormData(data));
+			accountType === 'client'
+				? navigate(`/signup/${accountType}/verification`)
+				: navigate(`/signup/${accountType}/registration`);
+		} catch (error) {
+			console.error(
+				'Signup Error',
+				error?.data?.error || 'Something went wrong'
+			);
+			alert(error?.data?.error || 'Signup failed');
+		}
 	};
 
 	const accountTitles = {
@@ -63,7 +90,7 @@ const Signup = () => {
 
 	return (
 		<section
-			className={`relative py-5 flex justify-center items-center border border-red-500 h-full container mx-auto ${clientPageStyles}`}
+			className={`relative py-5 flex justify-center items-center h-full container mx-auto ${clientPageStyles}`}
 		>
 			<div className='max-w-3xl lg:w-1/2 sm:w-2/3 flex justify-center items-center'>
 				<Card styles='lg:w-5/6 sm:w-4/5 pt-2 px-5 pb-7 font-inria-serif'>
@@ -81,19 +108,33 @@ const Signup = () => {
 						onSubmit={handleSubmit(onSubmit)}
 					>
 						<FormInput
-							name='first_name'
+							name='firstName'
 							inputType='text'
 							labelName='First Name'
 							register={register}
 							errors={errors}
+							validationRules={{
+								pattern: {
+									value: /^[A-Za-z]+(?:\s[A-Za-z]+)*$/, // Only letters & spaces
+									message:
+										'First name must contain only letters',
+								},
+							}}
 							required
 						/>
 						<FormInput
-							name='last_name'
+							name='lastName'
 							inputType='text'
 							labelName='Last Name'
 							register={register}
 							errors={errors}
+							validationRules={{
+								pattern: {
+									value: /^[A-Za-z]+(?:\s[A-Za-z]+)*$/, // Only letters & spaces
+									message:
+										'Last name must contain only letters',
+								},
+							}}
 							required
 						/>
 						<FormInput
@@ -110,18 +151,15 @@ const Signup = () => {
 							}}
 							required
 						/>
-						<FormInput
+						<PhoneNumberInput
 							name='phone'
 							inputType='tel'
 							labelName='Phone Number'
 							register={register}
 							errors={errors}
-							validationRules={{
-								pattern: {
-									value: /^(\+234|0)(7\d|8\d|9\d)\d{8}$/,
-									message: 'Invalid phone number format',
-								},
-							}}
+							setValue={setValue}
+							watch={watch}
+							trigger={trigger}
 							required
 						/>
 						<FormInput
@@ -140,7 +178,7 @@ const Signup = () => {
 							required
 						/>
 						<FormInput
-							name='confirm_password'
+							name='confirmPassword'
 							inputType='password'
 							labelName='Confirm Password'
 							register={register}
@@ -157,8 +195,11 @@ const Signup = () => {
 								size='m'
 								styles='mt-4 font-inter'
 								type='submit'
+								disabled={isLoading}
 							>
-								{accountType === 'client'
+								{isLoading
+									? 'Submitting'
+									: accountType === 'client'
 									? 'Submit'
 									: 'Next'}
 							</Button>
@@ -182,3 +223,5 @@ const Signup = () => {
 };
 
 export default Signup;
+
+// +2349051776591

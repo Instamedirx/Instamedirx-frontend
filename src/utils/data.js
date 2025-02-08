@@ -1,4 +1,4 @@
-import UserImage from 'assets/user.png'
+import UserImage from 'assets/user.png';
 
 export const specializations = [
 	'General Practitioner',
@@ -121,7 +121,7 @@ export const storyData = [
 				type: 'video',
 				duration: 10000,
 			},
-		]
+		],
 	},
 	{
 		username: 'Jane Doe',
@@ -143,7 +143,7 @@ export const storyData = [
 				type: 'video',
 				duration: 10000,
 			},
-		]
+		],
 	},
 	{
 		username: 'Jane Doe',
@@ -165,7 +165,7 @@ export const storyData = [
 				type: 'video',
 				duration: 10000,
 			},
-		]
+		],
 	},
 	{
 		username: 'Jane Doe',
@@ -187,7 +187,7 @@ export const storyData = [
 				type: 'video',
 				duration: 10000,
 			},
-		]
+		],
 	},
 	{
 		username: 'Jane Doe',
@@ -209,7 +209,7 @@ export const storyData = [
 				type: 'video',
 				duration: 10000,
 			},
-		]
+		],
 	},
 	{
 		username: 'Jane Doe',
@@ -231,7 +231,7 @@ export const storyData = [
 				type: 'video',
 				duration: 10000,
 			},
-		]
+		],
 	},
 	{
 		username: 'Jane Doe',
@@ -253,6 +253,72 @@ export const storyData = [
 				type: 'video',
 				duration: 10000,
 			},
-		]
+		],
+	},
+];
+
+export const doctorsData = [
+	{
+		id: 1,
+		name: 'Chisom Okoli',
+		specialty: 'Psychiatrist',
+		description:
+			'I am a Psychiatrist with nearly a 3-year working experience in both male and female sports with medical license as a chiropractor and intense workout',
+		rating: 4.5,
+		tags: [
+			'Psychiatry',
+			'Adolescent Trauma',
+			'Mental Stress',
+			'Physiotherapy',
+			'+25 more',
+		],
+		image: UserImage,
+	},
+	{
+		id: 2,
+		name: 'Chisom Okoli',
+		specialty: 'Psychiatrist',
+		description:
+			'I am a Psychiatrist with nearly a 3-year working experience in both male and female sports with medical license as a chiropractor and intense workout',
+		rating: 4.5,
+		tags: [
+			'Psychiatry',
+			'Adolescent Trauma',
+			'Mental Stress',
+			'Physiotherapy',
+			'+25 more',
+		],
+		image: UserImage,
+	},
+	{
+		id: 3,
+		name: 'Chisom Okoli',
+		specialty: 'Cardiologist',
+		description:
+			'I am a Psychiatrist with nearly a 3-year working experience in both male and female sports with medical license as a chiropractor and intense workout',
+		rating: 4.8,
+		tags: [
+			'Cardiology',
+			'Heart Surgery',
+			'Blood Pressure',
+			'+15 more',
+		],
+		image: UserImage,
+	},
+
+	{
+		id: 4,
+		name: 'Chisom Okoli',
+		specialty: 'Cardiologist',
+		description:
+			'I am a Psychiatrist with nearly a 3-year working experience in both male and female sports with medical license as a chiropractor and intense workout',
+		rating: 4.8,
+		tags: [
+			'Cardiology',
+			'Heart Surgery',
+			'Blood Pressure',
+			'+15 more',
+		],
+		image: UserImage,
 	},
 ];

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 const FormInput = ({
 	labelName,
@@ -10,18 +12,38 @@ const FormInput = ({
 	register,
 	errors,
 	errorKey,
+	setValue,
+	trigger,
+	watch,
 }) => {
 	const error =
 		errors?.[name] ||
 		errorKey
 			?.split('.')
 			.reduce((acc, key) => acc?.[key], errors);
+
+	const [selectedCountry, setSelectedCountry] =
+		useState('ng');
+
+	const handlePhoneChange = phone => {
+		const formattedPhoneNumber = phone.startsWith('+')
+			? phone
+			: `+${phone}`;
+		setValue(name, formattedPhoneNumber, {
+			shouldValidate: true,
+		});
+		trigger(name);
+	};
+
+	
+
 	return (
 		<div className='flex flex-col gap-1.5'>
 			<label
 				htmlFor={name}
 				className={`text-sm ${
-					required && "after:content-['*'] after:ml-0.5 after:text-red-500"
+					required &&
+					"after:content-['*'] after:ml-0.5 after:text-red-500"
 				}`}
 			>
 				{labelName}

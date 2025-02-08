@@ -8,7 +8,6 @@ import Doctor from '../../../assets/account_selection/doctor.svg';
 import Pharmacist from '../../../assets/account_selection/pharmacist.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAccountType } from '../../../app/features/signupSlice';
-import { useSetRoleMutation } from '../../../app/services/apiSlice';
 
 const AccountType = () => {
 	const accountTypes = [
@@ -34,28 +33,11 @@ const AccountType = () => {
 		state => state.signup.selectedAccountType
 	);
 
-	const [setRole, { isLoading, error }] =
-		useSetRoleMutation();
-
 	const navigate = useNavigate();
 
 	const handleClick = async type => {
 		dispatch(setAccountType(type.name.toLowerCase()));
-		navigate(type.route);
-
-		// try {
-		// 	const response = await setRole(
-		// 		type.name.toLowerCase()
-		// 	).unwrap();
-
-		// 	console.log(response.message);
-		// 	navigate(type.route);
-		// } catch (error) {
-		// 	console.error(
-		// 		error?.data?.error || 'An error occured'
-		// 	);
-		// 	alert(error?.data?.error || 'Failed to set role');
-		// }
+		setTimeout(() => navigate(type.route), 2000);
 	};
 
 	return (

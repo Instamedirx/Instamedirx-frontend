@@ -75,6 +75,7 @@ export default {
 			screens: {
 				xxs: '375px',
 				xs: '520px',
+				xlg: '900px'
 			},
 		},
 	},

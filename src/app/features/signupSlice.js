@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
 	selectedAccountType: '',
 	signupData: {},
+	user: null,
+	token: null,
 };
 
 const signupSlice = createSlice({
@@ -13,7 +15,10 @@ const signupSlice = createSlice({
 			const accountType = action.payload;
 			state.selectedAccountType = accountType;
 
-			localStorage.setItem('selectedAccountType', accountType);
+			localStorage.setItem(
+				'selectedAccountType',
+				accountType
+			);
 
 			if (accountType !== 'client') {
 				state.registrationDetails = {};
@@ -25,6 +30,18 @@ const signupSlice = createSlice({
 		},
 		setFormData: (state, action) => {
 			state.signupData = action.payload;
+		},
+		setUser: (state, action) => {
+			state.user = action.payload.user;
+			state.token = action.payload.token;
+
+			localStorage.setItem('token', action.payload.token);
+		},
+		logout: state => {
+			state.user = null;
+			state.token = null;
+
+			localStorage.removeItem('token');
 		},
 		setRegistrationDetails: (state, action) => {
 			if (state.registrationDetails)
@@ -66,6 +83,8 @@ const signupSlice = createSlice({
 export const {
 	setAccountType,
 	setFormData,
+	setUser,
+	logout,
 	setRegistrationDetails,
 	setQualifications,
 	addCertification,
