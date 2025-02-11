@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FaArrowRight, FaBars, FaTimes } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import Logo from '../assets/Logo.png';
+import Logo from '../assets/logo.png';
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 

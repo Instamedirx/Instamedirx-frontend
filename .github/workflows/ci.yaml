@@ -1,0 +1,48 @@
+
+name: Build, Scan, and Push Docker Image to ACR
+
+on:
+  push:
+    branches:
+      - masterr
+      # added branch "masterr" is non-existent as workflow is not intended to run at the moment
+      # this workflow will on successful merge of features and updates, build a new image, scan it for vulnerabilities, and then push to a container registry
+      # full setup will only be implemented when server is ready
+
+jobs:
+  build-scan-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Log in to Azure
+      uses: azure/login@v1
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+
+    - name: Log in to Azure Container Registry (ACR)
+      run: |
+        az acr login --name ${{ secrets.ACR_NAME }}
+
+    - name: Build Docker Image
+      run: |
+        docker build -t ${{ secrets.ACR_NAME }}.azurecr.io/myapp:${{ github.sha }} .
+
+    - name: Scan Docker Image for Vulnerabilities
+      uses: aquasecurity/trivy-action@v0.11.2
+      with:
+        image-ref: ${{ secrets.ACR_NAME }}.azurecr.io/myapp:${{ github.sha }}
+        format: 'table'
+        exit-code: '1'
+        severity: 'CRITICAL,HIGH'
+
+    - name: Push Docker Image to ACR
+      run: |
+        docker push ${{ secrets.ACR_NAME }}.azurecr.io/myapp:${{ github.sha }}
